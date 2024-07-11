@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Codo a Codo</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Biblioteca Codo a Codo</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="pages/registrarse.html">Registrarse</a></li>
+                <li class="nav-item"><a class="nav-link" href="pages/nosotros.html">Nosotros</a></li>
+                <li class="nav-item"><a class="nav-link" href="pages/iniciarSesion.html">Iniciar Sesión</a></li>
+                <li class="nav-item"><a class="nav-link" href="#bestsellers">BestSellers</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <section class="main-section">
+        <div class="overlay">
+            <h1>Todos los libros que quieras en un solo lugar!</h1>
+            <h2>¡Leer nunca fue tan fácil!</h2>
+            <p>Puedes cancelar tu suscripción cuando quieras.</p>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section text-center">
+        <h2>¿Qué libro deseas leer?</h2>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Buscar libros...">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="button">Buscar</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bestsellers Section -->
+    <section id="bestsellers" class="books-section text-center">
+        <h2>BestSellers</h2>
+        <div class="row" id="libros"></div>
+    </section>
+
+    <!-- Mejores Libros Nacionales Section -->
+    <section class="books-section text-center">
+        <h2>Mejores Libros Nacionales</h2>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="book">
+                    <img src="assets/img/nacional1.jpeg" alt="Libro Nacional 1">
+                    <div class="overlay">
+                        <p>Nombre del libro 3</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <a href="https://www.instagram.com"><img src="assets/img/instagram.png" alt="Instagram"></a>
+        <a href="https://www.whatsapp.com"><img src="assets/img/whatsapp.png" alt="WhatsApp"></a>
+        <a href="https://www.github.com"><img src="assets/img/github.png" alt="GitHub"></a>
+        <a href="https://www.linkedin.com"><img src="assets/img/linkedin.png" alt="LinkedIn"></a>
+    </footer>
+    <script src="js/nav-scroll.js"></script>
+    <script src="js/scripts.js"></script>
+    <script>
+        // Función para obtener libros y mostrarlos en el DOM
+        async function fetchLibros() {
+            try {
+                const response = await fetch('http://localhost:3000/libros');
+                const libros = await response.json();
+                
+                const librosDiv = document.getElementById('libros');
+                librosDiv.innerHTML = '';
+
+                libros.forEach(libro => {
+                    const libroElement = document.createElement('div');
+                    libroElement.className = 'col-md-3';
+                    libroElement.innerHTML = `
+                        <div class="book">
+                            <img src="assets/img/default_book.jpg" alt="${libro.titulo}">
+                            <div class="overlay">
+                                <p>${libro.titulo}</p>
+                                <p><strong>Autor:</strong> ${libro.autor}</p>
+                                <p><strong>Categoría:</strong> ${libro.categoria}</p>
+                                <p><strong>Disponibilidad:</strong> ${libro.disponibilidad ? 'Disponible' : 'No disponible'}</p>
+                            </div>
+                        </div>
+                    `;
+                    librosDiv.appendChild(libroElement);
+                });
+            } catch (error) {
+                console.error('Error fetching libros:', error);
+            }
+        }
+
+        // Llamar a la función para obtener los libros cuando la página carga
+        document.addEventListener('DOMContentLoaded', fetchLibros);
+    </script>
+</body>
+</html>
